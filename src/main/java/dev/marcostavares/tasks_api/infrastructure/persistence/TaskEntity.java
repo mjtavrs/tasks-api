@@ -13,7 +13,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,8 +26,7 @@ public class TaskEntity {
     @Getter
     private UUID id;
 
-    @NotBlank(message = "The user must inform a title to the task")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Getter
     @Setter
     private String title;
@@ -45,6 +43,7 @@ public class TaskEntity {
 
     @Column(nullable = false, name = "due_date")
     @Getter
+    @Setter
     private LocalDateTime dueDate;
 
     @Column(name = "created_at")
@@ -52,8 +51,8 @@ public class TaskEntity {
     @Getter
     private LocalDateTime createdAt;
 
-    public TaskEntity(String name, String description, TaskStatus status, LocalDateTime dueDate) {
-        this.title = name;
+    public TaskEntity(String title, String description, TaskStatus status, LocalDateTime dueDate) {
+        this.title = title;
         this.description = description;
         this.status = status;
         this.dueDate = dueDate;
