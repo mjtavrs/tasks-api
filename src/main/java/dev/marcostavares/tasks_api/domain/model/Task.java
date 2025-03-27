@@ -9,11 +9,11 @@ public class Task {
     private TaskStatus status;
     private LocalDateTime dueDate;
 
-    public Task(String title, String description, TaskStatus status, LocalDateTime dueDate) {
+    public Task(String title, String description, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;
-        this.status = TaskStatus.PENDING;
         this.dueDate = dueDate;
+        this.status = TaskStatus.PENDING;
     }
 
     public String getTitle() {
