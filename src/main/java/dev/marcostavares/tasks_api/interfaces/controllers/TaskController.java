@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.marcostavares.tasks_api.dtos.request.CreateTaskRequest;
 import dev.marcostavares.tasks_api.dtos.request.UpdateTaskRequest;
+import dev.marcostavares.tasks_api.dtos.request.UpdateTaskStatusRequest;
 import dev.marcostavares.tasks_api.dtos.response.TaskResponse;
 import dev.marcostavares.tasks_api.services.CreateTask;
 import dev.marcostavares.tasks_api.services.DeleteTask;
 import dev.marcostavares.tasks_api.services.ListTasks;
 import dev.marcostavares.tasks_api.services.UpdateTask;
+import dev.marcostavares.tasks_api.services.UpdateTaskStatus;
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,6 +38,9 @@ public class TaskController {
 
     @Autowired
     private UpdateTask updateTask;
+
+    @Autowired
+    private UpdateTaskStatus updateTaskStatus;
 
     @Autowired
     private DeleteTask deleteTask;
@@ -56,6 +61,13 @@ public class TaskController {
     public ResponseEntity<TaskResponse> updateTask(@PathVariable UUID id,
             @Valid @RequestBody UpdateTaskRequest request) {
         TaskResponse response = updateTask.execute(id, request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<TaskResponse> updateTaskStatus(@PathVariable UUID id,
+            @Valid @RequestBody UpdateTaskStatusRequest request) {
+        TaskResponse response = updateTaskStatus.execute(id, request);
         return ResponseEntity.ok().body(response);
     }
 
