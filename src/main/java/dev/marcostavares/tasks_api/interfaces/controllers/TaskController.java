@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.marcostavares.tasks_api.domain.model.TaskStatus;
 import dev.marcostavares.tasks_api.dtos.request.CreateTaskRequest;
 import dev.marcostavares.tasks_api.dtos.request.UpdateTaskRequest;
 import dev.marcostavares.tasks_api.dtos.request.UpdateTaskStatusRequest;
@@ -22,6 +24,7 @@ import dev.marcostavares.tasks_api.dtos.response.TaskResponse;
 import dev.marcostavares.tasks_api.services.CreateTask;
 import dev.marcostavares.tasks_api.services.DeleteTask;
 import dev.marcostavares.tasks_api.services.ListTasks;
+import dev.marcostavares.tasks_api.services.ListTasksByStatus;
 import dev.marcostavares.tasks_api.services.UpdateTask;
 import dev.marcostavares.tasks_api.services.UpdateTaskStatus;
 import jakarta.validation.Valid;
@@ -35,6 +38,9 @@ public class TaskController {
 
     @Autowired
     private ListTasks listTasks;
+
+    @Autowired
+    private ListTasksByStatus listTasksByStatus;
 
     @Autowired
     private UpdateTask updateTask;
@@ -52,9 +58,14 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponse>> getAllTasks() {
-        var tasksList = listTasks.execute();
-        return ResponseEntity.ok().body(tasksList);
+    public ResponseEntity<List<TaskResponse>> getTasksWithStatusOrWithoutStatus(
+            @RequestParam(name = "status", required = false) TaskStatus status) {
+
+        if (status == null) {
+            return ResponseEntity.ok(listTasks.execute());
+        }
+
+        return ResponseEntity.ok(listTasksByStatus.execute(status));
     }
 
     @PutMapping("/{id}")
