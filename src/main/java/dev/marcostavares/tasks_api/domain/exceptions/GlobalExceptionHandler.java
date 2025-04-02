@@ -1,5 +1,6 @@
 package dev.marcostavares.tasks_api.domain.exceptions;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,16 @@ public class GlobalExceptionHandler {
         });
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        "error", "Internal Server Error",
+                        "message", e.getMessage()));
     }
 
 }
