@@ -11,4 +11,6 @@ public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
 
     List<TaskEntity> findByStatus(TaskStatus status);
 
+    boolean existsByTitle(String title);
+
 }
